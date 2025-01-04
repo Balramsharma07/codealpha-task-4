@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+// Function to convert a string to lowercase
+string toLowerCase(const string& input) {
+    string lowerCase = input;
+    transform(lowerCase.begin(), lowerCase.end(), lowerCase.begin(), ::tolower);
+    return lowerCase;
+}
+
+// Basic sentiment analysis
+string analyzeSentiment(const string& message) {
+    string lowerMessage = toLowerCase(message);
+    if (lowerMessage.find("happy") != string::npos || lowerMessage.find("good") != string::npos ||
+        lowerMessage.find("great") != string::npos || lowerMessage.find("wonderful") != string::npos) {
+        return "You seem happy! 😊";
+    }
+    if (lowerMessage.find("sad") != string::npos || lowerMessage.find("bad") != string::npos ||
+        lowerMessage.find("terrible") != string::npos || lowerMessage.find("upset") != string::npos) {
+        return "I'm sorry to hear that. 😔";
+    }
+    return "I can't quite tell how you're feeling, but I'm here to help!";
+}
+
+// Basic question-answer mapping
+string answerQuestion(const string& question) {
+    unordered_map<string, string> knowledgeBase = {
+        {"what is your name", "I am ChatGPT, your friendly AI assistant!"},
+        {"how are you", "I'm just a program, so I don't have feelings, but I'm here to help you!"},
+        {"what is ai", "AI stands for Artificial Intelligence. It is the simulation of human intelligence in machines."},
+        {"what is the capital of france", "The capital of France is Paris."},
+        {"who created you", "I was created by OpenAI to assist with your questions and tasks!"}
+    };
+
+    string lowerQuestion = toLowerCase(question);
+    if (knowledgeBase.find(lowerQuestion) != knowledgeBase.end()) {
+        return knowledgeBase[lowerQuestion];
+    }
+    return "I'm not sure about that. Can you rephrase or ask something else?";
+}
+
+// Main chatbot function
+void chatbot() {
+    cout << "Hello! I'm your AI chatbot. Ask me anything, or type 'exit' to end the chat.\n";
+    
+    string userInput;
+    while (true) {
+        cout << "You: ";
+        getline(cin, userInput);
+
+        if (toLowerCase(userInput) == "exit") {
+            cout << "Chatbot: Goodbye! Have a great day! 😊" << endl;
+            break;
+        }
+
+        // Analyze sentiment
+        string sentiment = analyzeSentiment(userInput);
+        cout << "Chatbot: " << sentiment << endl;
+
+        // Answer questions
+        string response = answerQuestion(userInput);
+        cout << "Chatbot: " << response << endl;
+    }
+}
+
+int main() {
+    chatbot();
+    return 0;
+}
